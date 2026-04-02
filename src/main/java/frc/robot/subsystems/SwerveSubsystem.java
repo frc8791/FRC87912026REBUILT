@@ -17,20 +17,26 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.util.Units;
 import static edu.wpi.first.units.Units.Meter;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-
+private final Field2d field = new Field2d();
   File directory = new File(Filesystem.getDeployDirectory(),"swerve");
   SwerveDrive  swerveDrive;
   public SwerveSubsystem() {
      SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+      SmartDashboard.putData("Field", field);
+
     try
     {
       swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.maxSpeed, new Pose2d(new Translation2d(Meter.of(1),
@@ -67,13 +73,19 @@ public class SwerveSubsystem extends SubsystemBase {
     // Query some boolean state, such as a digital sensor.
     return false;
   }
-
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  }
-
-  @Override
+  field.setRobotPose(getPose());  
+    }
+    public Pose2d getPose() {
+  return swerveDrive.getPose();
+}
+  
+   
+  
+    @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
