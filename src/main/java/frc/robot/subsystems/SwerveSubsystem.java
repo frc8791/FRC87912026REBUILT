@@ -27,6 +27,10 @@ import edu.wpi.first.math.util.Units;
 import static edu.wpi.first.units.Units.Meter;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import edu.wpi.first.wpilibj.DriverStation;
 
 
 
@@ -48,6 +52,22 @@ private final Field2d field = new Field2d();
     {
       throw new RuntimeException(e);
     }
+    AutoBuilder.configure(
+    this::getPose,
+    this::resetOdometry,
+    this::getRobotRelativeSpeeds,
+    (speeds, feedforwards) -> driveRobotRelative(speeds),
+    new PPHolonomicDriveController(
+        new PIDConstants(5.0, 0.0, 0.0),
+        new PIDConstants(5.0, 0.0, 0.0)
+    ),
+    Constants.robotConfig,
+    () -> {
+      var alliance = DriverStation.getAlliance();
+      return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
+    },
+    this
+);
   }
 
   /**
@@ -121,6 +141,14 @@ public void resetOdometryToZero() {
 public void setStartingPose(Pose2d pose) {
     swerveDrive.resetOdometry(pose);
 }
+public ChassisSpeeds getRobotRelativeSpeeds() {
+    return swerveDrive.getRobotVelocity();
+}
+
+public void driveRobotRelative(ChassisSpeeds speeds) {
+    swerveDrive.drive(speeds);
+}
+
   
 }
 
