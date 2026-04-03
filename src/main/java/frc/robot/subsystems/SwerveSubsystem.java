@@ -146,7 +146,7 @@ public ChassisSpeeds getRobotRelativeSpeeds() {
 }
 
 public void driveRobotRelative(ChassisSpeeds speeds) {
-    swerveDrive.drive(speeds);
+    swerveDrive.setChassisSpeeds(speeds);
 }
 
 

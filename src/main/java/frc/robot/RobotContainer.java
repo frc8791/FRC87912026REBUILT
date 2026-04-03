@@ -88,7 +88,19 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
   try {
     PathPlannerPath path = PathPlannerPath.fromPathFile("StraightTest");
-    return AutoBuilder.followPath(path);
+
+    return Commands.sequence(
+        new InstantCommand(() -> {
+          var startingPose = path.getStartingHolonomicPose();
+          if (startingPose.isPresent()) {
+            drivebase.setStartingPose(startingPose.get());
+          } else {
+            drivebase.resetOdometryToZero();
+          }
+          drivebase.zeroGyro();
+        }),
+        AutoBuilder.followPath(path)
+    );
   } catch (Exception e) {
     DriverStation.reportError("Auto load failed: " + e.getMessage(), e.getStackTrace());
     return Commands.none();
