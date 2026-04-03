@@ -27,7 +27,6 @@ import edu.wpi.first.math.util.Units;
 import static edu.wpi.first.units.Units.Meter;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import com.ctre.phoenix6.hardware.Pigeon2;
 
 
 
@@ -80,10 +79,22 @@ private final Field2d field = new Field2d();
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  field.setRobotPose(getPose());  
+  field.setRobotPose(getPose());
+  Pose2d pose = getPose();
+
+    SmartDashboard.putNumber("Robot X", pose.getX());
+    SmartDashboard.putNumber("Robot Y", pose.getY());
+    SmartDashboard.putNumber("Robot Heading", pose.getRotation().getDegrees());
+   
     }
     public Pose2d getPose() {
   return swerveDrive.getPose();
+}
+public void resetOdometry(Pose2d pose) {
+    swerveDrive.resetOdometry(pose);
+}
+public void resetOdometryToZero() {
+    swerveDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d()));
 }
   
    
@@ -103,7 +114,7 @@ private final Field2d field = new Field2d();
 
   public Command driveFieldOriented(Supplier<ChassisSpeeds> velocity){
     return run(()->{
-      swerveDrive.driveFieldOriented(velocity.get());;
+      swerveDrive.driveFieldOriented(velocity.get());
     });
   }
   public void zeroGyro() {
