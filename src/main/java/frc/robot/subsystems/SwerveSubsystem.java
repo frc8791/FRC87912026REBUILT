@@ -27,6 +27,9 @@ import edu.wpi.first.math.util.Units;
 import static edu.wpi.first.units.Units.Meter;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.ctre.phoenix6.hardware.Pigeon2;
+
+
 
 public class SwerveSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
@@ -103,4 +106,9 @@ private final Field2d field = new Field2d();
       swerveDrive.driveFieldOriented(velocity.get());;
     });
   }
+  public void zeroGyro() {
+    swerveDrive.zeroGyro();  
 }
+  
+}
+
