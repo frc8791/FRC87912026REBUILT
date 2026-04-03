@@ -41,9 +41,7 @@ private final Field2d field = new Field2d();
 
     try
     {
-      swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.maxSpeed, new Pose2d(new Translation2d(Meter.of(1),
-                                                                                                                  Meter.of(4)),
-                                                                                                            Rotation2d.fromDegrees(0)));
+      swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.maxSpeed, new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
       // Alternative method if you don't want to supply the conversion factor via JSON files.
       // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
     } catch (Exception e)
@@ -119,6 +117,9 @@ public void resetOdometryToZero() {
   }
   public void zeroGyro() {
     swerveDrive.zeroGyro();  
+}
+public void setStartingPose(Pose2d pose) {
+    swerveDrive.resetOdometry(pose);
 }
   
 }
