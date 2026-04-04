@@ -99,7 +99,6 @@ public class RobotContainer {
           } else {
             drivebase.resetOdometryToZero();
           }
-          drivebase.zeroGyro();
         }),
         AutoBuilder.followPath(path)
     );
