@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Commands;
 
@@ -91,9 +93,9 @@ public class RobotContainer {
 
     return Commands.sequence(
         new InstantCommand(() -> {
-          var startingPose = path.getStartingHolonomicPose();
-          if (startingPose.isPresent()) {
-            drivebase.setStartingPose(startingPose.get());
+          var startPose = path.getStartingHolonomicPose();
+          if (startPose.isPresent()) {
+            drivebase.setStartingPose(startPose.get());
           } else {
             drivebase.resetOdometryToZero();
           }
@@ -106,4 +108,5 @@ public class RobotContainer {
     return Commands.none();
   }
 }
+
 }
