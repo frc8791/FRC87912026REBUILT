@@ -20,6 +20,9 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -34,12 +37,14 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final SendableChooser<Command> autoChooser = new SendableChooser<>();
       
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+  
     drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
      drivebase.zeroGyro();
     
@@ -73,8 +78,11 @@ public class RobotContainer {
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
         m_driverController.a().onTrue(
-    new InstantCommand(() -> drivebase.zeroGyro())
+    new InstantCommand(() -> drivebase.zeroGyro()));
+    m_driverController.leftBumper().whileTrue(
+    drivebase.driveFieldOriented(driveAngularVelocity.scaleTranslation(0.3))
 );
+
         
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
