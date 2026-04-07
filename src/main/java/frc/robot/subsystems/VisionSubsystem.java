@@ -107,6 +107,9 @@ public class VisionSubsystem extends SubsystemBase {
                 distance < 2
                     ? VecBuilder.fill(0.4, 0.4, 0.7)
                     : VecBuilder.fill(1.2, 1.2, 1.5);
+                    edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putNumber("Vision X", robotPose.getX());
+                    edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putNumber("Vision Y", robotPose.getY());
+                    edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putNumber("Vision Heading", robotPose.getRotation().getDegrees());
 
             // 🔥 THIS IS THE MAGIC LINE
             swerveDrive.addVisionMeasurement(
@@ -117,6 +120,7 @@ public class VisionSubsystem extends SubsystemBase {
 
             break; // only use first good tag
         }
+        edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putNumber("Tag Count", detections.length);
     }
 
     private boolean isValidPose(Pose2d pose) {
