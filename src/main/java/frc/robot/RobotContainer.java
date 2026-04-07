@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
@@ -49,13 +50,26 @@ public class RobotContainer {
      drivebase.zeroGyro();
     
   }
-  SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                () -> m_driverController.getLeftY() * -1,
-                                                                () -> m_driverController.getLeftX() * -1)
-                                                            .withControllerRotationAxis(m_driverController::getRightX)
-                                                            .deadband(OperatorConstants.DEADBAND)
-                                                            .scaleTranslation(0.8)
-                                                            .allianceRelativeControl(true);
+  
+
+SwerveInputStream driveAngularVelocity =
+    RobotBase.isSimulation()
+        ? SwerveInputStream.of(
+              drivebase.getSwerveDrive(),
+              () -> m_driverController.getLeftY(),
+              () -> m_driverController.getLeftX())
+            .withControllerRotationAxis(m_driverController::getRightX)
+            .deadband(OperatorConstants.DEADBAND)
+            .scaleTranslation(0.8)
+            .allianceRelativeControl(true)
+        : SwerveInputStream.of(
+              drivebase.getSwerveDrive(),
+              () -> -m_driverController.getLeftY(),
+              () -> -m_driverController.getLeftX())
+            .withControllerRotationAxis(m_driverController::getRightX)
+            .deadband(OperatorConstants.DEADBAND)
+            .scaleTranslation(0.8)
+            .allianceRelativeControl(true);
     SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(m_driverController::getRightX,
                                                                                              m_driverController::getRightY)
                                                             .headingWhile(true);
@@ -101,9 +115,10 @@ public class RobotContainer {
 
     return Commands.sequence(
         new InstantCommand(() -> {
+          drivebase.zeroGyro(); // only if robot is physically pointed same as path start
           var startPose = path.getStartingHolonomicPose();
           if (startPose.isPresent()) {
-            drivebase.setStartingPose(startPose.get());
+            drivebase.resetOdometry(startPose.get());
           } else {
             drivebase.resetOdometryToZero();
           }
