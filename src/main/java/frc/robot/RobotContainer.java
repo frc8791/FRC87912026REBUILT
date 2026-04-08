@@ -50,6 +50,7 @@ public class RobotContainer {
     configureBindings();
   
     drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
+    
      drivebase.zeroGyro();
     
   }
@@ -63,7 +64,7 @@ SwerveInputStream driveAngularVelocity =
               () -> m_driverController.getLeftX())
             .withControllerRotationAxis(m_driverController::getRightX)
             .deadband(OperatorConstants.DEADBAND)
-            .scaleTranslation(0.8)
+            .scaleTranslation(1.0)
             .allianceRelativeControl(true)
         : SwerveInputStream.of(
               drivebase.getSwerveDrive(),
@@ -71,7 +72,7 @@ SwerveInputStream driveAngularVelocity =
               () -> -m_driverController.getLeftX())
             .withControllerRotationAxis(m_driverController::getRightX)
             .deadband(OperatorConstants.DEADBAND)
-            .scaleTranslation(0.8)
+            .scaleTranslation(1.0)
             .allianceRelativeControl(true);
     SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(m_driverController::getRightX,
                                                                                              m_driverController::getRightY)
@@ -97,7 +98,7 @@ SwerveInputStream driveAngularVelocity =
         m_driverController.a().onTrue(
     new InstantCommand(() -> drivebase.zeroGyro()));
     m_driverController.leftBumper().whileTrue(
-    drivebase.driveFieldOriented(driveAngularVelocity.scaleTranslation(0.3))
+    drivebase.driveFieldOriented(driveAngularVelocity.copy().scaleTranslation( 0.5))
 );
 
         

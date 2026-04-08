@@ -103,6 +103,9 @@ private final Field2d field = new Field2d();
     SmartDashboard.putNumber("Robot X", pose.getX());
     SmartDashboard.putNumber("Robot Y", pose.getY());
     SmartDashboard.putNumber("Robot Heading", pose.getRotation().getDegrees());
+
+    SmartDashboard.putNumber("Gyro Heading", swerveDrive.getYaw().getDegrees());
+    SmartDashboard.putString("Robot Pose", pose.toString());
    
     }
     public Pose2d getPose() {
@@ -147,6 +150,10 @@ public ChassisSpeeds getRobotRelativeSpeeds() {
 
 public void driveRobotRelative(ChassisSpeeds speeds) {
     swerveDrive.setChassisSpeeds(speeds);
+}
+
+public void stop(){
+  swerveDrive.setChassisSpeeds(new ChassisSpeeds());
 }
 
 
