@@ -56,7 +56,7 @@ public class RobotContainer {
     DriverStation.silenceJoystickConnectionWarning(true);
     configureBindings();
     drivebase.setDefaultCommand(!RobotBase.isSimulation() ? driveFieldOrientedAngularVelocity : driveFieldOrientedDirectAngle);
-  NamedCommands.registerCommand("test", Commands.print("Hello World"));
+  NamedCommands.registerCommand("test", Commands.print("AUTO"));
   autoChooser = AutoBuilder.buildAutoChooser();
 SmartDashboard.putData("Auto Chooser", autoChooser);
     drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
